@@ -1,0 +1,65 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250">
+<meta name="generator" content="PSPad editor, www.pspad.com">
+<title>Hex Converter</title>
+<script language="javascript">
+var hexPrefix = "%";
+
+function toAscii(hex) {
+	if (hex.indexOf("0x") != 0) {
+		hex = "0x" + hex;
+	}
+	return String.fromCharCode(hex); // A unicode character
+}
+
+function toHex(Ascii) {
+	var hex = Ascii.charCodeAt(0); // Character decimal code
+	return hexPrefix + hex.toString(16); // The hex code
+}
+
+
+function btnConvert_onclick() {
+	var txtSrc = document.getElementById("txtSrc");
+	var txtDest = document.getElementById("txtDest");
+	txtDest.value = "";
+	if (document.getElementById("rdoTypeToHex").checked) {
+		for (var i=0; i<txtSrc.value.length; i++) {
+			txtDest.value += toHex(txtSrc.value.charAt(i));
+		}
+	}
+	else {
+		var src = txtSrc.value;
+		if (src.indexOf(hexPrefix) == 0) {
+			src = src.substring(hexPrefix.length).replace(/ /g, "");
+		}
+		var arrHex = src.split(hexPrefix);
+		for (var i=0; i<arrHex.length; i++) {
+			txtDest.value += toAscii(arrHex[i]);
+		}
+	}
+}
+</script>
+</head>
+<body>
+	<div>
+		<textarea type="text" id="txtSrc" name="txtSrc" rows="3" cols="40"></textarea>
+		<div style="display:inline-block; width:400px;">
+			<label style="padding-left: 20px;">Examples:</label>
+			<ul style="margin-top: 3px;">
+				<li>41 to char</li>
+				<li>41%42%43 to chars</li>
+				<li>你好 to hex</li>
+			</ul>
+		</div>
+	</div>
+	<div>
+		<textarea type="text" id="txtDest" name="txtDest" rows="3" cols="120" readonly></textarea>
+	</div>
+	To:
+	<input type="radio" name="rdoType" id="rdoTypeToHex" checked /><label for="rdoTypeToHex">Hex</label>
+	<input type="radio" name="rdoType" id="rdoTypeToChar" /><label for="rdoTypeToChar">Char</label>
+	<input type="button" id="btnConvert" value="Convert" onclick="btnConvert_onclick()">
+</body>
+</html>
